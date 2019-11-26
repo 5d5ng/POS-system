@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="729" key="DIALOG_X_ORIGIN"/>
+		<item value="403" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="pnamecalculation" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="pnamecalculation"/>
+			<item value="prod_price_list"/>
+			<item value="item_list"/>
+			<item value="회원 추가 완료"/>
+			<item value="회원추가완료"/>
+			<item value="count_list"/>
+			<item value="list"/>
+			<item value="books_add"/>
+			<item value="purchase"/>
+			<item value="print_finish"/>
+			<item value="받은"/>
+			<item value="받은 돈"/>
+			<item value="update"/>
+			<item value="회원 폰번호를"/>
+			<item value="영수증"/>
+		</list>
+		<list key="replacehistory">
+			<item value="prod_price_list"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="288" key="DIALOG_WIDTH"/>
+		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
+		<item value="404" key="DIALOG_HEIGHT"/>
+		<item value="2233" key="DIALOG_X_ORIGIN"/>
+		<item value="-24" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/LACUC/Desktop/1.Study/3-2/5.소프트웨어 공학/software-engineering/mysql-connector-java-5.1.37-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/LACUC/Desktop/1.Study/3-2/1.데이터베이스/ojdbc6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

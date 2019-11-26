@@ -1,0 +1,32 @@
+package MarketPos;
+
+import java.util.Scanner;
+
+public class MainPOS {
+	public static void main(String[] args) {
+		    Scanner sc = new Scanner(System.in);
+		
+			System.out.println("사용하시려는 기능을 선택해 주세요");
+			System.out.println("\t 1. 관리자");
+			System.out.println("\t 2. 판매자");
+			String result = sc.next();
+
+			switch (result) {
+			case "1"://관리자
+				MarkmanagementProgram administor = new MarkmanagementProgram();
+				administor.go();
+				break;
+			case "2"://판매자
+				SellerProgram seller = new SellerProgram();
+				seller.go();
+				
+				break;
+			default:
+				System.out.println("입력이 잘못 되었습니다.");
+				break;
+			}
+		
+		
+	}
+
+}
