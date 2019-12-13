@@ -1,0 +1,1059 @@
+package MarketPos;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.border.Border;
+
+//import com.sun.glass.events.MouseEvent;
+
+
+public class GUI_Seller{
+
+	public static DBconnector dbconnecter = DBconnector.getInstacne();//DBconnector class를 상속.
+	//	private static ArrayList<String> ShoppingBasket_Barcode = new ArrayList<String>(); //바코드 받을 리스트
+	//	private static ArrayList<Integer> ShoppingBasket_Amount = new ArrayList<Integer>(); // 구매양 받을 리스트
+	//	private static ArrayList<String> ShoppingBasket_Pname  = new ArrayList<String>(); // 제품 명 받을 리스트
+	//	private String  customerPnum = ""; // 회원 전화번호 멤버십때 이용
+
+
+
+	private JButton sellButton = new JButton(new ImageIcon("images/sell.jpg")); //제품구매
+	private JButton memberButton = new JButton(new ImageIcon("images/member.jpg")); //회원추가
+	private JButton adminButton = new JButton(new ImageIcon("images/admin.jpg")); //관리자모드
+	private JButton exitButton = new JButton(new ImageIcon("images/exit.jpg")); //종료
+
+
+	private ImageIcon logo = new ImageIcon("images/logo.jpg");
+	private JLabel logoImage = new JLabel(logo);
+	private JPanel thePanel1;
+
+
+	//	private JButton buyButton = new JButton(new ImageIcon("images/buy.jpg"));
+	//	private JButton cancelButton = new JButton(new ImageIcon("images/cancel.jpg"));
+	//	private JButton cashButton = new JButton(new ImageIcon("images/cash.jpg"));
+	//	private JButton cardButton = new JButton(new ImageIcon("images/card.jpg"));
+	////	private JButton baaddButton = new JButton(new ImageIcon("images/baadd.jpg"));
+	//	private JButton bafinButton = new JButton(new ImageIcon("images/bafin.jpg"));
+	//	private JButton sellexitButton = new JButton(new ImageIcon("images/sellexit.jpg")); //종료
+
+	private JPanel thePanel2;
+
+	private ImageIcon order = new ImageIcon("images/order.jpg");
+	private JLabel orderImage = new JLabel(order);
+	//private ImageIcon baco = new ImageIcon("images/baco.jpg");
+	//private JLabel bacoImage = new JLabel(baco);
+	private ImageIcon barcode = new ImageIcon("images/barcode.jpg");
+	private JLabel barcodeImage = new JLabel(barcode);
+	private ImageIcon num = new ImageIcon("images/amount.jpg");
+	private JLabel numImage = new JLabel(num);
+	//
+
+	public GUI_Seller() 
+	{	 JFrame f1 = new JFrame("MarketPos");
+	Main(f1); //판매자 초기화면
+	f1.getContentPane().add(thePanel1);
+	f1.setPreferredSize(new Dimension(1000,750));
+	f1.pack();
+	f1.setVisible(true);
+	f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	private void setImage(JButton bt) {
+		bt.setBackground(Color.red);
+		bt.setBorderPainted(false);
+		bt.setFocusPainted(false);
+		bt.setContentAreaFilled(false);
+	}
+	public void Main(JFrame f1) 
+	{
+		thePanel1 = new JPanel();
+		f1.setLayout(new BorderLayout());
+		thePanel1.setBackground(new Color(26,44,91));
+		thePanel1.setLayout(null);
+		setImage(sellButton); //판매
+		setImage(memberButton); //회원추가 버튼
+		setImage(adminButton); // 관리자 버튼
+		setImage(exitButton); //종료 버튼 
+
+		logoImage.setBounds(20,15, 345, 50); 
+
+		sellButton.setBounds(250,150, 200, 200);		
+		sellButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon sellButton_clicked = new ImageIcon("images/sell_clicked.jpg"); //제품구매 눌려진 이미지
+				sellButton.setIcon(sellButton_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/sell.jpg"); // 누르고 나갔을때 이미지 
+				sellButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) {
+				JFrame f2 = new JFrame("제품구매");
+				purchase(f2);
+				f2.setPreferredSize(new Dimension(1000,750));
+				f2.pack();
+				f2.setVisible(true);			
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		memberButton.setBounds(500,150, 200, 200);
+		memberButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon member_clicked = new ImageIcon("images/member_clicked.jpg"); //제품구매 눌려진 이미지
+				memberButton.setIcon(member_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/member.jpg"); // 누르고 나갔을때 이미지 
+				memberButton.setIcon(undo);
+
+			}
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) {
+				addMemberWindow();
+
+			}
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent e) {
+
+			}	
+		});
+
+
+		adminButton.setBounds(250,400, 200, 200);
+		adminButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon admin_clicked = new ImageIcon("images/admin_clicked.jpg"); //제품구매 눌려진 이미지
+				adminButton.setIcon(admin_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/admin.jpg"); // 누르고 나갔을때 이미지 
+				adminButton.setIcon(undo);
+
+			}
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) {
+				GUI_admin ad = new GUI_admin();
+				ad.check();
+			}
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent e) {
+
+			}	
+		});
+
+		exitButton.setBounds(500,400, 200, 200);
+		exitButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon exit_clicked = new ImageIcon("images/exit_clicked.jpg"); //제품구매 눌려진 이미지
+				exitButton.setIcon(exit_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/exit.jpg"); // 누르고 나갔을때 이미지 
+				exitButton.setIcon(undo);
+
+			}
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) {
+				System.exit(1);
+			}
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent e) {
+
+			}	
+		});
+
+		thePanel1.add(logoImage);
+		thePanel1.add(sellButton);
+		thePanel1.add(memberButton);
+		thePanel1.add(adminButton);
+		thePanel1.add(exitButton);
+
+	}
+	public void setTextField(JTextField L){
+		Border lineBorder = BorderFactory.createLineBorder(Color.white, 4);
+		Border emptyBorder = BorderFactory.createEmptyBorder(7, 7, 7, 7);
+		L.setBorder(BorderFactory.createCompoundBorder(lineBorder,emptyBorder));
+		L.setBackground(new Color(26,44,91));
+		L.setForeground(Color.white);
+		L.setFont(new Font("굴림",Font.PLAIN,25));
+	}
+
+
+	// 텍스트필드 선설정 배경 글꼴 함수
+	public void	addMemberWindow() {
+		JFrame f = new JFrame();
+		f.setTitle("회원추가");
+		JPanel NewWindowMember = new JPanel();
+		f.setLayout(new BorderLayout());
+		NewWindowMember.setLayout(null);
+		NewWindowMember.setBackground(new Color(26,44,91));
+		f.setContentPane(NewWindowMember);
+
+		ImageIcon name = new ImageIcon("images/name.jpg");
+		JLabel nameImage = new JLabel(name);
+		ImageIcon age = new ImageIcon("images/age.jpg");
+		JLabel ageImage = new JLabel(age);	        
+		ImageIcon PhoneNumber = new ImageIcon("images/PhoneNumber.jpg");
+		JLabel PhoneNumberImage = new JLabel(PhoneNumber);
+
+		JButton okayButton = new JButton(new ImageIcon("images/okay.jpg")); //종료
+		setImage(okayButton);
+
+
+
+
+		JTextField nameField = new JTextField();  //이름 입력
+		setTextField(nameField);     
+		JTextField ageField = new JTextField();  //나이
+		setTextField(ageField);
+		JTextField phoneNumberField = new JTextField(); //전화번호
+		setTextField(phoneNumberField);     
+
+		NewWindowMember.add(nameImage);
+		NewWindowMember.add(ageImage);
+		NewWindowMember.add(PhoneNumberImage);
+		NewWindowMember.add(nameField);
+		NewWindowMember.add(phoneNumberField);
+		NewWindowMember.add(ageField);
+		NewWindowMember.add(okayButton);
+
+		nameImage.setBounds(55,72,85,46);
+		ageImage.setBounds(55,160,81,47);
+		PhoneNumberImage.setBounds(13,255,175,44);
+
+		nameField.setBounds(205,70,250,50);
+		phoneNumberField.setBounds(205,250,250,50);
+		ageField.setBounds(205,160,250,50);
+		okayButton.setBounds(170,360,138,51);
+		okayButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon okayButton_clicked = new ImageIcon("images/okay_clicked.jpg"); //눌려진 이미지
+				okayButton.setIcon(okayButton_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/okay.jpg"); // 누르고 나갔을때 이미지 
+				okayButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { //회원등록
+
+				if(nameField.getText().equals("") || phoneNumberField.getText().equals("") || ageField.getText().equals("")) {
+					JOptionPane popup = new JOptionPane();
+					popup.showMessageDialog(null, "항목을 모두 입력하세요");	
+				}
+				else {
+					if(!dbconnecter.checkCustomer(phoneNumberField.getText())) { //이미 회원으로 등록되어있지않은 경우
+						dbconnecter.addCustomer(nameField.getText(),phoneNumberField.getText(),'B',0,Integer.parseInt(ageField.getText()));
+						System.out.println("회원등록완료");
+						JOptionPane popup =new JOptionPane();
+						popup.showMessageDialog(null, "회원을 등록하였습니다.");
+					}
+					else {  //회원으로 등록되어있는 경우
+						JOptionPane popup =new JOptionPane();
+						popup.showMessageDialog(null, "이미 등록된 회원입니다.");
+					}
+					f.setVisible(false);
+				}
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+
+		f.setSize(500,500);
+		f.setResizable(true);
+		f.setVisible(true);
+
+
+	}
+
+	private void purchase(JFrame f2) {
+		JButton baaddButton = new JButton(new ImageIcon("images/baadd.jpg"));
+
+		JButton buyButton = new JButton(new ImageIcon("images/buy.jpg"));
+		JButton cancelButton = new JButton(new ImageIcon("images/cancel.jpg"));
+		JButton cashButton = new JButton(new ImageIcon("images/cash.jpg"));
+		JButton cardButton = new JButton(new ImageIcon("images/card.jpg"));
+		//		private JButton baaddButton = new JButton(new ImageIcon("images/baadd.jpg"));
+		JButton bafinButton = new JButton(new ImageIcon("images/bafin.jpg"));
+		JButton sellexitButton = new JButton(new ImageIcon("images/sellexit.jpg"));
+
+		print_start();
+		//		ArrayList<String> ShoppingBasket_Barcode = new ArrayList<String>(); //바코드 받을 리스트
+		//		ArrayList<Integer> ShoppingBasket_Amount = new ArrayList<Integer>(); // 구매양 받을 리스트
+		//		ArrayList<String> ShoppingBasket_Pname  = new ArrayList<String>(); // 제품 명 받을 리스트
+		//		ArrayList<Integer> ShoppingBasket_Price =  new ArrayList<Integer>();  //상품 가격		
+
+
+		thePanel2 =  new JPanel();
+		f2.setLayout(new BorderLayout());
+		thePanel2.setBackground(new Color(26,44,91));
+		thePanel2.setLayout(null);
+
+		setImage(buyButton);
+		setImage(cancelButton);
+		setImage(cashButton);
+		setImage(cardButton);
+
+		setImage(baaddButton); //바코드 추가 부분
+		setImage(bafinButton);  // 추가완료 부분
+		setImage(sellexitButton);
+
+		logoImage.setBounds(20,15, 345, 50);
+		orderImage.setBounds(50, 125, 501, 500);
+		//bacoImage.setBounds(600, 125, 315, 207);
+
+		JTextField bacoField = new JTextField(); 
+		setTextField(bacoField);
+		JTextField numField = new JTextField(); 
+		setTextField(numField);
+
+		barcodeImage.setBounds(615, 125, 118, 46);
+		numImage.setBounds(615, 180, 80, 46);
+		bacoField.setBounds(772, 125, 125, 50);
+		numField.setBounds(772, 180, 125, 50);
+
+		JTextArea addProduct = new JTextArea(); 
+		JTextArea addPrice = new JTextArea();
+		JTextArea addAmount = new JTextArea();
+		JTextArea addallPrice = new JTextArea();
+		JTextArea allPrice = new JTextArea();
+
+		//구매 상품 추가 부분
+		baaddButton.setBounds(615, 250, 130, 60);
+		baaddButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon baadd_clicked = new ImageIcon("images/baadd_clicked.jpg"); //제품구매 눌려진 이미지
+				baaddButton.setIcon(baadd_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/baadd.jpg"); // 누르고 나갔을때 이미지 
+				baaddButton.setIcon(undo);
+
+			}
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) {
+				int onePrice1 = 0;
+				Color gray = new Color(0x777777);
+				String tmpb = bacoField.getText();
+				String tmpnum = numField.getText();
+
+				if(tmpb.equals("") ||tmpnum.equals("")) {
+
+					JOptionPane popup = new JOptionPane();
+					popup.showMessageDialog(null, "항목을 모두 입력하세요");	
+
+				}
+				else {
+					String addedBarcode = bacoField.getText();
+					int addedAmount = Integer.parseInt(numField.getText());
+					int price = dbconnecter.checkProduct(addedBarcode, addedAmount);
+					String addedPname = dbconnecter.pnamecalculation(addedBarcode);
+
+					if(price >=1) {
+						DBconnector.ShoppingBasket_Barcode.add(addedBarcode); //장바구니에 추가
+						DBconnector.ShoppingBasket_Amount.add(addedAmount);
+						onePrice1 = addProduct(bacoField, numField, addProduct,  addPrice, addAmount, addallPrice);  
+						DBconnector.ShoppingBasket_Price.add(price);
+						DBconnector.ShoppingBasket_Pname.add(addedPname);  //상품이름 담아두는 곳
+						System.out.println(addedBarcode+" : "+addedAmount+"개");
+
+					}
+					else {
+						System.out.println("구매할 수 없는 상품입니다.");
+						JOptionPane popup =new JOptionPane();
+						popup.showMessageDialog(null, "구매할 수 없는 상품입니다.");	
+					}
+
+					int tmp_onePrice2 =0;
+
+					String onePrice2 = allPrice.getText();
+					if(onePrice2.equals("")) 
+						tmp_onePrice2 =0;
+					else 
+						tmp_onePrice2 = Integer.parseInt(onePrice2);
+
+					int sumPrice = onePrice1 + tmp_onePrice2;
+					allPrice.setText(Integer.toString(sumPrice));
+					allPrice.setFont(new Font("굴림",Font.PLAIN,25));
+					allPrice.setForeground(Color.white);
+					allPrice.setBackground(gray);
+					thePanel2.add(allPrice);
+					allPrice.setBounds(455, 587, 70, 30);
+				}
+			}
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent e) {
+
+			}	
+		});
+
+		//구매 완료 버튼 부분 - 추가완료
+		bafinButton.setBounds(770, 250, 130, 60);
+		bafinButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon bafin_clicked = new ImageIcon("images/bafin_clicked.jpg"); //눌려진 이미지
+				bafinButton.setIcon(bafin_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/bafin.jpg"); // 누르고 나갔을때 이미지 
+				bafinButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { 
+				DBconnector.added_all = true;	
+
+				dbconnecter.fee = calculation(DBconnector.ShoppingBasket_Price,DBconnector.ShoppingBasket_Amount);
+				JOptionPane popup =new JOptionPane();
+				popup.showMessageDialog(null, "모든 상품 담기완료 이제 결제가 가능합니다.");			
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+
+
+		//회원구매 액션부분
+		buyButton.setBounds(620, 350, 126, 126);
+		buyButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon buy_clicked = new ImageIcon("images/buy_clicked.jpg"); //눌려진 이미지
+				buyButton.setIcon(buy_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/buy.jpg"); // 누르고 나갔을때 이미지 
+				buyButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { 
+				if(DBconnector.added_all) {
+					JFrame f = new JFrame();
+					memberbuy(f);  
+				}
+				else {
+					JOptionPane popup =new JOptionPane();
+					popup.showMessageDialog(null, "구매완료를 하지않았습니다.구매를 완료하였다면,추가완료 버튼을 눌러주세요.");					
+
+				}
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		//구매 취소버튼을 누른 경우
+		cancelButton.setBounds(770, 350, 126, 126);
+		cancelButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon cancel_clicked = new ImageIcon("images/cancel_clicked.jpg"); //눌려진 이미지
+				cancelButton.setIcon(cancel_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/cancel.jpg"); // 누르고 나갔을때 이미지 
+				cancelButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { 
+				reset_var();
+				DBconnector.ShoppingBasket_Barcode.clear();//바코드 받을 리스트
+				DBconnector.ShoppingBasket_Amount.clear(); // 구매양 받을 리스트
+				DBconnector.ShoppingBasket_Pname.clear();  // 제품 명 받을 리스트
+				DBconnector.ShoppingBasket_Price.clear();   //상품 가격	
+				DBconnector.ShoppingBasket_Barcode = new ArrayList<String>();
+				DBconnector.ShoppingBasket_Amount = new ArrayList<Integer>();
+				DBconnector.ShoppingBasket_Pname = new ArrayList<String>();  // 제품 명 받을 리스트
+				DBconnector.ShoppingBasket_Price = new ArrayList<Integer>();
+
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {					
+				f2.setVisible(false);
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+		//현금 결제 액션
+		cashButton.setBounds(620, 500, 126, 126);
+		cashButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon cash_clicked = new ImageIcon("images/cash_clicked.jpg"); //눌려진 이미지
+				cashButton.setIcon(cash_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/cash.jpg"); // 누르고 나갔을때 이미지 
+				cashButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { 
+				if(DBconnector.added_all) {
+					JFrame f3 = new JFrame("현금결제");
+					addCashWindow(f3,dbconnecter.fee);
+
+					if(dbconnecter.chkCustomer) dbconnecter.membercalculation();
+					books_add(DBconnector.ShoppingBasket_Barcode,DBconnector.ShoppingBasket_Amount,DBconnector.ShoppingBasket_Price,DBconnector.ShoppingBasket_Pname,1);
+					product_print(DBconnector.ShoppingBasket_Pname,DBconnector.ShoppingBasket_Amount,DBconnector.ShoppingBasket_Price,dbconnecter.fee,1);
+					dbconnecter.renew_pamount(DBconnector.ShoppingBasket_Barcode, DBconnector.ShoppingBasket_Amount);
+					reset_var();
+				}
+				else {
+					JOptionPane popup =new JOptionPane();
+					popup.showMessageDialog(null, "구매완료를 하지않았습니다.구매를 완료하였다면,추가완료 버튼을 눌러주세요.");					
+
+				}
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		//카드결제 액션
+		cardButton.setBounds(770, 500, 126, 126);
+		cardButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon card_clicked = new ImageIcon("images/card_clicked.jpg"); //눌려진 이미지
+				cardButton.setIcon(card_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/card.jpg"); // 누르고 나갔을때 이미지 
+				cardButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { 
+				if(DBconnector.added_all) {
+					JFrame f3 = new JFrame("카드결제");
+					addCardWindow(f3,dbconnecter.fee);   
+					if(dbconnecter.chkCustomer) dbconnecter.membercalculation();
+					books_add(DBconnector.ShoppingBasket_Barcode,DBconnector.ShoppingBasket_Amount,DBconnector.ShoppingBasket_Price,DBconnector.ShoppingBasket_Pname,1);
+					product_print(DBconnector.ShoppingBasket_Pname,DBconnector.ShoppingBasket_Amount,DBconnector.ShoppingBasket_Price,dbconnecter.fee,1);
+					dbconnecter.renew_pamount(DBconnector.ShoppingBasket_Barcode, DBconnector.ShoppingBasket_Amount);
+					reset_var();
+				}
+				else {
+					JOptionPane popup =new JOptionPane();
+					popup.showMessageDialog(null, "구매완료를 하지않았습니다.구매를 완료하였다면,추가완료 버튼을 눌러주세요.");					
+
+				}
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		sellexitButton.setBounds(885,10, 88, 86);
+		sellexitButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon sellexit_clicked = new ImageIcon("images/sellexit_clicked.jpg"); //제품구매 눌려진 이미지
+				sellexitButton.setIcon(sellexit_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/sellexit.jpg"); // 누르고 나갔을때 이미지 
+				sellexitButton.setIcon(undo);
+			}
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) {
+				f2.setVisible(false);
+			}
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent e) {
+
+			}	
+		});
+
+		thePanel2.add(logoImage);
+		thePanel2.add(orderImage);
+		thePanel2.add(barcodeImage);
+		thePanel2.add(numImage);
+		thePanel2.add(bacoField);
+		thePanel2.add(numField);
+		thePanel2.add(baaddButton);
+		thePanel2.add(bafinButton);
+		thePanel2.add(buyButton);
+		thePanel2.add(cancelButton);
+		thePanel2.add(cashButton);
+		thePanel2.add(cardButton);
+		thePanel2.add(sellexitButton);
+		f2.getContentPane().add(thePanel2);
+
+
+
+
+	}
+
+	public int addProduct(JTextField bacoField, JTextField numField,JTextArea addProduct, JTextArea addPrice,JTextArea addAmount,JTextArea addallPrice) {
+
+		String addedBarcode = bacoField.getText();
+		int addedAmount = Integer.parseInt(numField.getText());
+		int price = dbconnecter.checkProduct(addedBarcode, addedAmount);
+		String addedPname = dbconnecter.pnamecalculation(addedBarcode);
+
+		Color gray = new Color(0x777777);
+		int allPrice = price * addedAmount;
+
+		addProduct.append(addedPname + "\n");
+		addProduct.setFont(new Font("굴림",Font.PLAIN,25));
+		addProduct.setForeground(Color.white);
+		addProduct.setBackground(gray);
+		thePanel2.add(addProduct);
+		addProduct.setBounds(110, 220, 70, 350);
+
+
+		addPrice.append(Integer.toString(price)+"\n");
+		addPrice.setFont(new Font("굴림",Font.PLAIN,25));
+		addPrice.setForeground(Color.white);
+		addPrice.setBackground(gray);
+		thePanel2.add(addPrice);
+		addPrice.setBounds(260, 220, 60, 350);
+
+		addAmount.append(Integer.toString(addedAmount)+"\n");
+		addAmount.setFont(new Font("굴림",Font.PLAIN,25));
+		addAmount.setForeground(Color.white);
+		addAmount.setBackground(gray);
+		thePanel2.add(addAmount);
+		addAmount.setBounds(380, 220, 60, 350);
+
+		addallPrice.append(Integer.toString(allPrice)+"\n");
+		addallPrice.setFont(new Font("굴림",Font.PLAIN,25));
+		addallPrice.setForeground(Color.white);
+		addallPrice.setBackground(gray);
+		thePanel2.add(addallPrice);
+		addallPrice.setBounds(475, 220, 60, 350);
+
+		bacoField.setText(""); //추가하면 텍스트 clear
+		numField.setText("");
+
+		return allPrice;
+	}
+
+
+
+	// 회원구매창
+	public void memberbuy(JFrame f) {
+		f.setTitle("회원구매");
+		JPanel NewWindowMember = new JPanel();
+		f.setLayout(new BorderLayout());
+		NewWindowMember.setLayout(null);
+		NewWindowMember.setBackground(new Color(26,44,91));
+		f.setContentPane(NewWindowMember);
+
+		ImageIcon PhoneNumber = new ImageIcon("images/PhoneNumber.jpg");
+		JLabel PhoneNumberImage = new JLabel(PhoneNumber);
+
+		JButton okayButton = new JButton(new ImageIcon("images/okay.jpg")); //종료
+		setImage(okayButton);
+
+		JTextField phoneNumberField = new JTextField();
+		setTextField(phoneNumberField);
+
+		NewWindowMember.add(PhoneNumberImage);
+		NewWindowMember.add(phoneNumberField);
+		NewWindowMember.add(okayButton);
+
+		PhoneNumberImage.setBounds(20,50,175,44);
+		phoneNumberField.setBounds(215,50,250,50);
+
+		okayButton.setBounds(180,125,138,51);
+		okayButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if(dbconnecter.checkCustomer(phoneNumberField.getText()))//회원이라면
+				{
+					System.out.println(phoneNumberField.getText());
+					dbconnecter.chkCustomer = true; 
+					dbconnecter.phone = phoneNumberField.getText();
+					JOptionPane popup =new JOptionPane();
+					popup.showMessageDialog(null, "회원 인증완료.");
+				}
+				else checkRegister();
+
+				f.setVisible(false);
+			}
+		});
+
+		f.setSize(500,250);
+		f.setResizable(true);
+		f.setVisible(true);
+
+	}
+
+	private void checkRegister() {
+
+		int result = JOptionPane.showConfirmDialog(null, "회원이 아닙니다. 회원추가를 하시겠습니까?","Confirm",JOptionPane.YES_NO_OPTION);
+		if(result == JOptionPane.CANCEL_OPTION) {
+			return;
+		}
+		else if(result == JOptionPane.YES_OPTION) {
+			addMemberWindow();
+			JOptionPane popup =new JOptionPane();
+			popup.showMessageDialog(null, "회원추가를 하셨으면 회원구매를 다시 눌러주세요.");
+			//			dbconnecter.chkCustomer = true; 
+		}
+		else {
+			return;
+		}
+	}
+
+
+
+
+	public void	addCashWindow(JFrame f,int pay) {
+		f.setTitle("현금결제");
+		JPanel NewWindowMember = new JPanel();
+		f.setLayout(new BorderLayout());
+		NewWindowMember.setLayout(null);
+		NewWindowMember.setBackground(new Color(26,44,91));
+		f.setContentPane(NewWindowMember);
+
+		ImageIcon InputCash = new ImageIcon("images/getCash.jpg");
+		JLabel InputCashImage = new JLabel(InputCash);
+		JButton okayButton = new JButton(new ImageIcon("images/okay.jpg")); //종료
+		setImage(okayButton);
+
+		JTextField InputCashField = new JTextField();
+		setTextField(InputCashField);
+
+
+
+		NewWindowMember.add(InputCashImage);
+		NewWindowMember.add(InputCashField);
+		NewWindowMember.add(okayButton);
+
+		InputCashImage.setBounds(20,50,142,41);
+		InputCashField.setBounds(215,50,250,50);
+
+		//오키 버튼 액션
+		okayButton.setBounds(180,125,138,51);
+		okayButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon okayButton_clicked = new ImageIcon("images/okay_clicked.jpg"); //눌려진 이미지
+				okayButton.setIcon(okayButton_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/okay.jpg"); // 누르고 나갔을때 이미지 
+				okayButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { 
+				int InputCash = Integer.parseInt(InputCashField.getText()); // 받은 금액
+				if(InputCash>pay) { 
+					JOptionPane popup =new JOptionPane();
+					int change = InputCash - pay;
+					popup.showMessageDialog(null,  "총금액:" + pay +"원\r\n" + "받은돈 :" + InputCash+"원\r\n" +"거스름돈 :" + change+"원\r\n" );
+					f.setVisible(false);
+					print_finish();
+				}
+				else { // 받은 금액이 적은 경우
+					JOptionPane popup =new JOptionPane();
+					popup.showMessageDialog(null, "결제금액이 부족합니다.");	
+				}
+
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		f.setSize(500,250);
+		f.setResizable(true);
+		f.setVisible(true);
+	}
+
+	public void	addCardWindow(JFrame f,int pay) {
+		f.setTitle("카드결제");
+		JPanel NewWindowMember = new JPanel();
+		f.setLayout(new BorderLayout());
+		NewWindowMember.setLayout(null);
+		NewWindowMember.setBackground(new Color(26,44,91));
+		f.setContentPane(NewWindowMember);
+
+		ImageIcon CardNum = new ImageIcon("images/cardNum.jpg");
+		JLabel CardNumImage = new JLabel(CardNum);
+
+		JButton okayButton = new JButton(new ImageIcon("images/okay.jpg")); //종료
+		setImage(okayButton);
+
+		JTextField CardNumField = new JTextField();
+		setTextField(CardNumField);
+
+		NewWindowMember.add(CardNumImage);
+		NewWindowMember.add(CardNumField);
+		NewWindowMember.add(okayButton);
+
+		CardNumImage.setBounds(20,50,142,37);
+		CardNumField.setBounds(215,50,250,50);
+
+		okayButton.setBounds(180,125,138,51);
+		okayButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				ImageIcon okayButton_clicked = new ImageIcon("images/okay_clicked.jpg"); //눌려진 이미지
+				okayButton.setIcon(okayButton_clicked);				
+			}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				ImageIcon undo = new ImageIcon("images/okay.jpg"); // 누르고 나갔을때 이미지 
+				okayButton.setIcon(undo);
+			}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) { 
+				String inputCarNum = CardNumField.getText();
+
+				JOptionPane popup =new JOptionPane();
+				popup.showMessageDialog(null, "카드 결제완료 결제금액:"+pay);	
+
+				f.setVisible(false);
+				print_finish();
+
+
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		f.setSize(500,250);
+		f.setResizable(true);
+		f.setVisible(true);
+	}
+	//fee를 계산하는 메소드
+	public int calculation(ArrayList<Integer> prod_count_price,ArrayList<Integer> count_list) {	//물품 번호,물품 개수를 이용해서 비용을 확인 
+		int fee =0;
+
+		for (int i = 0; i < count_list.size(); i++) {
+			fee += prod_count_price.get(i)
+					* count_list.get(i);
+		}
+
+		System.out.println(count_list.size() + "개/ 총 금액 계산완료 =" + fee);// 구입물품의 개수, 총 금액 출력
+		return fee; //총금액 호출
+	}
+
+	private void books_add(ArrayList<String> item_list,ArrayList<Integer> count_list,ArrayList<Integer> shoppingBasket_Price,ArrayList<String> pname_list,int cash) {
+		for(int i = 0;i<item_list.size();i++) {
+			if(cash != 0)
+				dbconnecter.addBooks(item_list.get(i), count_list.get(i), shoppingBasket_Price.get(i), pname_list.get(i),"cash");//값 저장.
+			else dbconnecter.addBooks(item_list.get(i), count_list.get(i), shoppingBasket_Price.get(i), pname_list.get(i),"card");
+		}
+		System.out.println("장부 기록이 완료되었습니다.");
+
+	}
+
+
+
+	//	public int payment(JTextField Field) {
+	//		String inputCarNum = Field.getText();
+	//		ArrayList<Integer> price_list_per1 = dbconnecter.pricecalculation(ShoppingBasket_Barcode); //장바구니에 담은 상품들의 제품 1개당 가격 저장		 
+	//		int wholePrice = 0; // 총 결제해야하는 금액
+	//		for(int i=0 ; i<ShoppingBasket_Amount.size();i++) {
+	//			wholePrice += ShoppingBasket_Amount.get(i)*price_list_per1.get(i);
+	//
+	//		}
+	//		return wholePrice;
+	//	}
+	//
+	//	
+	public void reset_var() {
+		dbconnecter.added_all = false;
+		dbconnecter.chkCustomer = false; 
+		dbconnecter.fee=0;
+		dbconnecter.phone = null;
+
+		//그리고 Purchase Order에 적혀있던 내용 다지워져야함 아니면 다시 초기화면으로 돌아가던가 -오동의-
+
+	}
+
+
+	//영수증을 작성하는 메소드
+	private void product_print(ArrayList<String> pname_list, ArrayList<Integer> count_list,ArrayList<Integer> price_list, int fee, int cash) {
+		BufferedWriter bw;//쓰기
+		BufferedReader br;//읽기
+
+		try {
+
+
+			bw = new BufferedWriter(new FileWriter("receipt.txt", true));
+			bw.write("=======================\r\n");
+			bw.write("제품이름\t\t제품수\t가격\r\n");
+			bw.write("------------------------------------------");
+			bw.newLine();
+			for(int i = 0;i<pname_list.size();i++) {
+				String data = pname_list.get(i)+"\t\t"+ count_list.get(i)+"\t"+ (count_list.get(i)*price_list.get(i))+ "\n";
+				System.out.println("레소연 :"+pname_list.size());
+				bw.write(data.toString());
+				bw.newLine();
+			}
+			String method;
+			if(cash != 0) method="cash";
+			else method="card";
+			bw.write("------------------------------------------\r\n");
+			bw.write("\n");
+			bw.write("결제 방법\t"+ method);
+			bw.newLine();
+			bw.write("총    금액\t"+ fee);
+			bw.write("\r\n=======================");
+			bw.newLine();
+			bw.flush();
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void print_finish() {
+
+		try {
+			Desktop.getDesktop().edit(new File("receipt.txt"));
+		} catch (IOException e) {
+			System.out.println("영수증이 없습니다.");
+			e.printStackTrace();
+		}
+		System.out.println("영수증을 출력하였습니다.");
+	}
+
+	private void print_start() { 
+		try {
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("receipt.txt"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+}

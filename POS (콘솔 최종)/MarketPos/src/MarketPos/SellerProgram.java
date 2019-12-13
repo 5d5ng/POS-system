@@ -1,0 +1,308 @@
+package MarketPos;
+
+
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+public class SellerProgram {
+	Scanner scan;//글을 입력하는 것.
+	DBconnector dbconnecter;//DBconnector class를 상속.
+	String user_num = "";//고객 번호
+
+	
+	public SellerProgram() {
+		scan = new Scanner(System.in);//글을 입력하는 객체 생성
+	}
+
+	public void go() {//DBconnector class 연결.
+		System.out.println("판매자 프로그램을 시작합니다.");
+		dbconnecter = new DBconnector();//객체 생성
+		start();//start 메소드 연결
+	}
+
+   //메뉴 메소드
+	public void start() {
+		while (true) {
+			System.out.println("사용하시려는 기능을 선택해 주세요");
+
+			System.out.println("\t 1. 물건구매");
+			System.out.println("\t 2. 회원추가");
+			System.out.println("\t 3. 관리자모드");
+			System.out.println("\t 4. 종료");
+
+			String result = scan.next();//4개의 기능 중 1개 입력
+
+			switch (result) {
+			case "1"://물건 구매
+				
+				purchase();
+				
+				break;
+			case "2"://회원 추가
+			    customer_add();//메소드 이동
+				break;	
+			case "3":  //관리자모드
+				AdministratorProgram administor = new AdministratorProgram();
+				administor.check();
+				break;
+			case "4"://종료
+				System.out.println("시스템을 종료합니다.");
+				System.exit(1);
+			default:
+				System.out.println("입력이 잘못 되었습니다.");
+				break;
+			}
+		}
+	}
+
+
+
+	//고객 등록 메소드
+	public void customer_add() {
+		
+		String cname; //이름
+		String phone; //전화번호
+		char grade ='B'; //멤버등급
+		int saving = 0; //적립금
+		int age; //나이
+		
+
+		System.out.println("회원등록을 시작합니다.");
+		System.out.println("이름을 입력해 주세요");
+		cname = scan.next();
+		System.out.println("전화번호를 입력해 주세요");
+		phone = scan.next();
+		System.out.println("나이 입력해 주세요");
+		age = scan.nextInt();
+					
+		dbconnecter.addCustomer(cname, phone, grade, saving,age);//값 저장.
+		System.out.println("등록이 완료 되었습니다.");
+	}
+	
+
+
+	public void purchase() {
+		
+		String cardnum=null;
+		int cash=0;
+		int fee=0;
+		int balance=0;
+		int check = 0;
+		String phone = null;
+		boolean member = false;
+
+		System.out.println("지금부터 상품 구매를 시작하겠습니다.");
+		ArrayList<String> prod_item_list = new ArrayList<String>(); //상품 바코드
+		ArrayList<Integer> prod_count_list = new ArrayList<Integer>();//상품 개수
+		ArrayList<String> prod_price_list = null;   //상품가격   
+		ArrayList<String> prod_pname_list = null;   //상품이름
+		int count = 0;
+		
+		print_start();
+		
+		while (true) {   //무한루프
+			System.out.println("-----------------------");
+			System.out.println("\t 추가: 1입력");
+			System.out.println("\t 추가완료 : 2입력");
+			System.out.println("\t 회원구매 : 3입력");
+			System.out.println("\t 현금결재 : 4입력");
+			System.out.println("\t 카드결재 : 5입력");
+			System.out.println("\t 구매종료 : 1,2,3,4,5 외 아무키 입력");
+			System.out.println("-----------------------");
+			
+			String result = scan.next();
+			switch(result) {
+			case "1": //추가
+				if(check == 0) {
+					System.out.println("바코드를 입력해주세요");
+					String item = scan.next();
+					System.out.println("물품개수를 입력해주세요");
+					 count = scan.nextInt();
+					if(dbconnecter.checkProduct(item,count)) {
+					prod_item_list.add(item);//구매하려는 물품의 바코드를 물품 번호 list에 저장
+					prod_count_list.add(count);//구매하려는 물품의 개수를 list에 저장
+					System.out.println(item+" : "+count+"개");
+					}
+					else {
+						System.out.println("구매할수 없는 상품입니다.");
+					}
+					}
+				else System.out.println("추가를 완료하였습니다.");
+				break;
+				
+			case "2": //추강완료, 총액계산
+				check = 1;	
+				prod_price_list = dbconnecter.pricecalculation(prod_item_list,count); 
+				prod_pname_list = dbconnecter.pnamecalculation(prod_item_list);
+				fee = calculation(prod_price_list,prod_count_list);  
+				break;
+				
+			case "3": //회원구매
+				if(check == 0) System.out.println("추가완료버튼을 눌러주세요");   //구매 완료를 안했응면
+				else {       //구매 완료를 했으면
+					System.out.println("회원 폰번호를 입력해주세요");
+					phone = scan.next();
+					if(dbconnecter.checkCustomer(phone)) member=true;  
+					else checkRegister(phone,fee);
+				}
+				break;
+			case "4": //현금결재
+				if(check == 0) System.out.println("추가완료버튼을 눌러주세요");   //구매 완료를 안했응면
+				else {       //구매 완료를 했으면  - cash와 balance 결정			
+					while(true) {
+				    System.out.println("낸 금액을 입력하시오");
+					cash = scan.nextInt();
+					if(fee>cash)  System.out.println("총액보다 금액이 적습니다.");
+					else break;
+					}
+					balance = cashcalculation(cash,fee);
+				}
+				break;
+				
+			case "5": //카드결재
+				if(check == 0) System.out.println("추가완료버튼을 눌러주세요");   //구매 완료를 안했응면
+				else {       //구매 완료를 했으면   - 카드번화입력
+					System.out.println("카드번호를 입력하시오");
+					cardnum = scan.next();
+				}
+				break;
+			default:
+				System.out.println("구매를 종료합니다.");
+				return;	
+			}
+			
+			if(check ==1 && (result.equals("4") || result.equals("5")))  //while문 나옴
+				break;   
+		}
+			
+		
+			books_add(prod_item_list,prod_count_list,prod_price_list,prod_pname_list,cash);
+			product_print(prod_pname_list,prod_count_list,prod_price_list,fee,cash);
+			//갱신
+			if(member) dbconnecter.membercalculation(phone,fee);
+			dbconnecter.renew_pamount(prod_item_list, prod_count_list);
+			print_finish();
+			
+	}
+		
+
+	
+//영수증을 작성하는 메소드
+	private void product_print(ArrayList<String> pname_list, ArrayList<Integer> count_list,ArrayList<String> price_list, int fee, int cash) {
+		BufferedWriter bw;//쓰기
+		BufferedReader br;//읽기
+		
+		try {
+			bw = new BufferedWriter(new FileWriter("receipt.txt", true));
+			bw.write("=======================\r\n");
+			bw.write("제품이름\t\t제품수\t가격\r\n");
+			bw.write("------------------------------------------");
+			bw.newLine();
+			for(int i = 0;i<pname_list.size();i++) {
+				String data = pname_list.get(i)+"\t\t"+ count_list.get(i)+"\t"+ (count_list.get(i)*Integer.parseInt(price_list.get(i)))+ "\n";
+			bw.write(data.toString());
+			bw.newLine();
+			}
+			String method;
+			if(cash != 0) method="cash";
+			else method="card";
+			bw.write("------------------------------------------\r\n");
+			bw.write("\n");
+			bw.write("결제 방법\t"+ method);
+			bw.newLine();
+			bw.write("총    금액\t"+ fee);
+			bw.write("\r\n=======================");
+			bw.newLine();
+			bw.flush();
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	
+	}
+
+	private void books_add(ArrayList<String> item_list,ArrayList<Integer> count_list,ArrayList<String> price_list,ArrayList<String> pname_list,int cash) {
+		for(int i = 0;i<item_list.size();i++) {
+			if(cash != 0)
+			dbconnecter.addBooks(item_list.get(i), count_list.get(i), price_list.get(i), pname_list.get(i),"cash");//값 저장.
+			else dbconnecter.addBooks(item_list.get(i), count_list.get(i), price_list.get(i), pname_list.get(i),"card");
+		}
+		System.out.println("장부 기록이 완료되었습니다.");
+		
+	}
+	
+	//fee를 계산하는 메소드
+	public int calculation(ArrayList<String> prod_count_price,ArrayList<Integer> count_list) {	//물품 번호,물품 개수를 이용해서 비용을 확인 
+		int fee =0;
+		
+		for (int i = 0; i < count_list.size(); i++) {
+			fee += Integer.parseInt(prod_count_price.get(i))
+					* count_list.get(i);
+		}
+
+		System.out.println(count_list.size() + "개/ 총 금액 계산완료 =" + fee);// 구입물품의 개수, 총 금액 출력
+		return fee; //총금액 호출
+	}
+
+	private int cashcalculation(int cash, int fee) {
+		int balance = cash - fee;
+		System.out.println("받은돈 = "+ cash+"  거스름돈 = "+ balance);
+		return cash-fee;	
+	}
+
+	private void checkRegister(String phone, int fee) {
+		System.out.println("=======================");
+		System.out.println("회원등록을 하시겠습니까");
+		System.out.println("-----------------------");
+		System.out.println("\t 1. 네.");
+		System.out.println("\t 2. 아니요.");
+		System.out.println("\t 3. 종료.");
+		System.out.println("=======================");
+		
+		String result = scan.next();
+
+		switch (result) {
+		case "1":
+			customer_add();
+			dbconnecter.membercalculation(phone,fee);
+			break;
+		case "2":
+			break;
+		case "3" :
+			return;
+		}
+		
+	}
+	
+	private void print_finish() {
+		
+		try {
+			Desktop.getDesktop().edit(new File("receipt.txt"));
+		} catch (IOException e) {
+			System.out.println("영수증이 없습니다.");
+			e.printStackTrace();
+		}
+		System.out.println("영수증을 출력하였습니다.");
+	}
+
+	private void print_start() { 
+		try {
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("receipt.txt"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+}
+}

@@ -1,8 +1,5 @@
 package MarketPos;
-
-
 import java.util.Scanner;
-
 public class AdministratorProgram {
 	public static Scanner scan;//글을 입력하는 것.
 	public static DBconnector dbconnecter;//DBconnector class를 상속.
@@ -168,10 +165,7 @@ public class AdministratorProgram {
 			}
 		}
 
-	
-		
 			
 		
-
  
 }

@@ -9,6 +9,7 @@ public class MainPOS {
 		System.out.println("사용하시려는 기능을 선택해 주세요");
 		System.out.println("\t 1. 관리자");
 		System.out.println("\t 2. 판매자");
+		
 		String result ;
 
 		while (true) {
