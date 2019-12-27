@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="test.Sd"/>
+<fullyQualifiedTypeName name="test.TestInterface"/>
+<fullyQualifiedTypeName name="MarketPos.DBconnector2"/>
+<fullyQualifiedTypeName name="MarketPos.DB_seller"/>
+<fullyQualifiedTypeName name="MarketPos.DBconnector"/>
+<fullyQualifiedTypeName name="MarketPos.DB_administrator"/>
+<fullyQualifiedTypeName name="MarketPos.GUI_admin"/>
+</qualifiedTypeNameHistroy>

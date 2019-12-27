@@ -1,0 +1,47 @@
+package MarketPos;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DB_seller {
+	Connection conn = DBconnector2.getConnection();
+	PreparedStatement pstm = null;
+	ResultSet rs = null;
+	public static DB_seller db_sell = new DB_seller();
+	public static DB_seller getInstacne() {
+		 if(db_sell == null) {
+			 db_sell = new DB_seller();
+		   }
+		   
+		   return db_sell;
+		
+	}
+	 //회원인지 확인하는 메소드
+	   public boolean checkCustomer(String phone) {
+	      try {
+	     
+	         String sql = "select * from customer where phone = '"+phone+"'"; // item 으로 바코드 확인하고 
+	         pstm = conn.prepareStatement(sql);
+				rs = pstm.executeQuery();
+
+	         while(rs.next()) {         
+	            String target = rs.getString("phone");
+	            if(target.equals(phone)) {
+	               return true;
+	            }
+	         }
+	         rs.close();
+	         return false;
+	      } catch (SQLException se) {
+	         System.err.println("SQL 수행중 에러가 발생했습니다." + se.getMessage());
+	      } finally {
+	      }
+	      return false;
+	   }
+	
+	
+}

@@ -1,0 +1,61 @@
+package MarketPos;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DB_administrator { // 관리자 쿼리문 수행 부분
+	Connection conn = DBconnector2.getConnection();
+	 PreparedStatement pstm = null;
+	 ResultSet rs = null;
+	 public boolean checkPw(String inputPW) {
+//         Connection conn = null; // DB연결된 상태(세션)을 담은 객체
+//         PreparedStatement pstm = null;  // SQL 문을 나타내는 객체
+//         ResultSet rs = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체       
+         try {
+             
+             String quary = "select * from administrator";             
+            
+             pstm = conn.prepareStatement(quary);
+             rs = pstm.executeQuery();
+             
+             
+             while (rs.next()) { //다음 방문할 값이 존재하는 동안 루프
+                 String pw = rs.getString("password"); // getInt(1)
+                 if(pw.equals(inputPW)) {
+                    System.out.println("관리자모드 로그인 성공 ");
+                    return true;
+                 }
+              }
+              rs.close();
+              pstm.close();
+
+           } catch (SQLException se) {
+              System.err.println("SQL 수행중 에러가 발생했습니다." + se.getMessage());
+           } finally {
+
+           }
+           return false;
+     }
+	//물품을 추가하는 메소드 
+	  public void addProduct(String barcode, String pname, String ptype, String pamount, String expiration,int price) {
+	      try {         
+	         String sql = " insert into product values('"+barcode+"','"+pname+"','" +ptype+"','"+ pamount +"','"+expiration +"' ,"+price+ ")" ;    
+	         pstm = conn.prepareStatement(sql);
+             rs = pstm.executeQuery();
+
+	      } catch (SQLException se) {
+	         System.err.println("SQL 수행중 에러가 발생했습니다." + se.getMessage());
+	      } finally {
+	      }      
+
+	      System.out.println( barcode + "\t" +pname+ "\t" +ptype+ "\t" +pamount + "\t" +expiration + "\t" + price + "제품 추가 완료");
+	   }
+
+
+	
+
+}

@@ -1,0 +1,40 @@
+package MarketPos;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class DB_administrator {
+	 public boolean checkPw(String inputPW) {
+         Connection conn = null; // DB연결된 상태(세션)을 담은 객체
+         PreparedStatement pstm = null;  // SQL 문을 나타내는 객체
+         ResultSet rs = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체
+         
+         try {
+             
+             String quary = "select * from administrator";            
+             conn = DBconnector2.getConnection();
+             pstm = conn.prepareStatement(quary);
+             rs = pstm.executeQuery();
+             
+             
+             while (rs.next()) { //다음 방문할 값이 존재하는 동안 루프
+                 String pw = rs.getString("password"); // getInt(1)
+                 if(pw.equals(inputPW)) {
+                    System.out.println("관리자모드 로그인 성공 ");
+                    return true;
+                 }
+              }
+              rs.close();
+              pstm.close();
+
+           } catch (SQLException se) {
+              System.err.println("SQL 수행중 에러가 발생했습니다." + se.getMessage());
+           } finally {
+
+           }
+           return false;
+     }
+
+}
