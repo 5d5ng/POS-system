@@ -12,7 +12,9 @@
 ![2](/pos_project/screenshot/판매화면.JPG)
 관리자 화면(초기 비밀번호1234)
 ![3](/pos_project/screenshot/관리자모드.JPG)
+
 상품등록 화면
+
 ![4](/pos_project/screenshot/상품등록화면.JPG)
 상품조회 화면
 ![5](/pos_project/screenshot/상품조회.JPG)
