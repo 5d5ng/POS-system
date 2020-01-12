@@ -12,6 +12,8 @@
 
 ![2](https://user-images.githubusercontent.com/43948697/71499227-ecbf6280-28a2-11ea-996a-0609c33f3329.JPG)
 
+![3](/screenshot/관리자모드.JPG)
+
 ## 실행방법
 POS.exe 파일 실행 
 *서버는 학교내부 서버를 이용하여서 외부에서 접근이 불가능합니다.
