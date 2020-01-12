@@ -6,6 +6,7 @@
 
 *서버는 학교내부 서버를 이용하여서 외부에서 접근이 불가능합니다.
 
+## 스크린샷
 ![1](https://user-images.githubusercontent.com/43948697/71499204-de714680-28a2-11ea-8f07-209278551eae.JPG)
 
 
