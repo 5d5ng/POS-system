@@ -16,13 +16,21 @@
 상품등록 화면
 
 ![4](/pos_project/screenshot/상품등록화면.JPG)
+
 상품조회 화면
+
 ![5](/pos_project/screenshot/상품조회.JPG)
+
 회원조회 화면
+
 ![6](/pos_project/screenshot/회원조회.JPG)
+
 회원추가 화면
+
 ![3](/pos_project/screenshot/회원추가.JPG)
+
 장부조회 화면
+
 ![3](/pos_project/screenshot/장부조회.JPG)
 
 ## 실행방법
